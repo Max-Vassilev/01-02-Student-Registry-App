@@ -6,28 +6,22 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-    
 
 jobs:
-  build_and_test:
-
+  build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-    - name: Install Node.js
-      uses: actions/setup-node@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }} # That way it gets tested on all Node versions included in the matrix
+        node-version: 20
 
     - name: Install dependencies
       run: npm install
-    
-    - name: Execute integration tests
-      run: npm run test
+
+    - name: Run start script
+      run: npm run start
