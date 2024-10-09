@@ -23,23 +23,27 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run start script
-      run: npm run start &
-
   test:
     runs-on: ubuntu-latest
-    needs: build  # Ensure test runs after build is complete
+    needs: build  
     steps:
-    - name: Checkout repository
+    - name: Checkout the code
       uses: actions/checkout@v3
-
-    - name: Set up Node.js
+    - name: Install Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 20
-
     - name: Install dependencies
       run: npm install
-
     - name: Run tests
       run: npm run test
+    
+  deplpy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploy to production
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.MY_RENDER_API_KEY }}
